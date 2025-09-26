@@ -214,10 +214,10 @@ router.get('/pools/:poolId',
 });
 
 // Stake tokens in pool
-router.post('/pools/:poolId/stake', authMiddleware, 
+router.post('/pools/:poolId/stake', authMiddleware, [
   param('poolId').isNumeric().withMessage('Pool ID must be numeric'),
-  body('amount').isFloat({ min: 0.001 }).withMessage('Amount must be at least 0.001'),
-, async (req, res) => {
+  body('amount').isFloat({ min: 0.001 }).withMessage('Amount must be at least 0.001')
+], async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -151,7 +151,7 @@ router.post('/execute', authMiddleware, [
 });
 
 // Get payout history
-router.get('/history', 
+router.get('/history', [
   query('eventId').optional().notEmpty().withMessage('Event ID cannot be empty'),
   query('challengeId').optional().notEmpty().withMessage('Challenge ID cannot be empty'),
   query('poolId').optional().isNumeric().withMessage('Pool ID must be numeric'),
@@ -250,7 +250,7 @@ router.get('/history',
 });
 
 // Get specific payout details
-router.get('/:payoutId', 
+router.get('/:payoutId', [
   param('payoutId').notEmpty().withMessage('Payout ID is required')
 ], async (req, res) => {
   try {

@@ -156,7 +156,7 @@ router.post('/upload-data', authMiddleware, [
 });
 
 // Get file/data from Filecoin by IPFS hash
-router.get('/retrieve/:ipfsHash', 
+router.get('/retrieve/:ipfsHash', [
   param('ipfsHash').notEmpty().withMessage('IPFS hash is required')
 ], async (req, res) => {
   try {
@@ -189,7 +189,7 @@ router.get('/retrieve/:ipfsHash',
 });
 
 // Get file content directly (for images, videos, etc.)
-router.get('/file/:ipfsHash', 
+router.get('/file/:ipfsHash', [
   param('ipfsHash').notEmpty().withMessage('IPFS hash is required')
 ], async (req, res) => {
   try {
