@@ -3,7 +3,7 @@ const { body, param, query, validationResult } = require('express-validator');
 const hederaService = require('../services/hederaService');
 const graphService = require('../services/graphService');
 const filecoinService = require('../services/filecoinService');
-const authMiddleware = require('../middleware/auth');
+const { authMiddleware } = require('../middleware/auth');
 const logger = require('../utils/logger');
 
 const router = express.Router();
@@ -151,7 +151,7 @@ router.post('/execute', authMiddleware, [
 });
 
 // Get payout history
-router.get('/history', [
+router.get('/history', 
   query('eventId').optional().notEmpty().withMessage('Event ID cannot be empty'),
   query('challengeId').optional().notEmpty().withMessage('Challenge ID cannot be empty'),
   query('poolId').optional().isNumeric().withMessage('Pool ID must be numeric'),
@@ -250,7 +250,7 @@ router.get('/history', [
 });
 
 // Get specific payout details
-router.get('/:payoutId', [
+router.get('/:payoutId', 
   param('payoutId').notEmpty().withMessage('Payout ID is required')
 ], async (req, res) => {
   try {
@@ -317,7 +317,7 @@ router.get('/:payoutId', [
 });
 
 // Get user's payout history
-router.get('/user/:userAddress', [
+router.get('/user/:userAddress', 
   param('userAddress').isEthereumAddress().withMessage('Valid Ethereum address is required'),
   query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Limit must be between 1 and 50')
@@ -402,7 +402,7 @@ router.get('/user/:userAddress', [
 });
 
 // Get payout statistics for an event
-router.get('/stats/:eventId', [
+router.get('/stats/:eventId', 
   param('eventId').notEmpty().withMessage('Event ID is required')
 ], async (req, res) => {
   try {

@@ -5,7 +5,7 @@ const hederaService = require('../services/hederaService');
 const filecoinService = require('../services/filecoinService');
 const aiService = require('../services/aiService');
 const graphService = require('../services/graphService');
-const authMiddleware = require('../middleware/auth');
+const { authMiddleware } = require('../middleware/auth');
 const logger = require('../utils/logger');
 
 const router = express.Router();
@@ -151,7 +151,7 @@ router.post('/submit', authMiddleware, upload.single('proof'), [
 });
 
 // Get challenge submissions for an event/challenge
-router.get('/', [
+router.get('/', 
   query('eventId').optional().notEmpty().withMessage('Event ID cannot be empty'),
   query('challengeId').optional().notEmpty().withMessage('Challenge ID cannot be empty'),
   query('submitter').optional().isEthereumAddress().withMessage('Valid submitter address required'),
@@ -248,7 +248,7 @@ router.get('/', [
 });
 
 // Get specific submission details
-router.get('/:submissionId', [
+router.get('/:submissionId', 
   param('submissionId').notEmpty().withMessage('Submission ID is required')
 ], async (req, res) => {
   try {
@@ -376,7 +376,7 @@ router.post('/:submissionId/verify', authMiddleware, [
 });
 
 // Get challenge leaderboard
-router.get('/:eventId/:challengeId/leaderboard', [
+router.get('/:eventId/:challengeId/leaderboard', 
   param('eventId').notEmpty().withMessage('Event ID is required'),
   param('challengeId').notEmpty().withMessage('Challenge ID is required'),
   query('limit').optional().isInt({ min: 1, max: 100 }).withMessage('Limit must be between 1 and 100')

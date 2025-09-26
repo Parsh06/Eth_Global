@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const { body, param, query, validationResult } = require('express-validator');
 const filecoinService = require('../services/filecoinService');
-const authMiddleware = require('../middleware/auth');
+const { authMiddleware } = require('../middleware/auth');
 const logger = require('../utils/logger');
 
 const router = express.Router();
@@ -156,7 +156,7 @@ router.post('/upload-data', authMiddleware, [
 });
 
 // Get file/data from Filecoin by IPFS hash
-router.get('/retrieve/:ipfsHash', [
+router.get('/retrieve/:ipfsHash', 
   param('ipfsHash').notEmpty().withMessage('IPFS hash is required')
 ], async (req, res) => {
   try {
@@ -189,7 +189,7 @@ router.get('/retrieve/:ipfsHash', [
 });
 
 // Get file content directly (for images, videos, etc.)
-router.get('/file/:ipfsHash', [
+router.get('/file/:ipfsHash', 
   param('ipfsHash').notEmpty().withMessage('IPFS hash is required')
 ], async (req, res) => {
   try {

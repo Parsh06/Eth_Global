@@ -10,13 +10,13 @@ require('dotenv').config();
 // Import routes
 const authRoutes = require('./routes/auth');
 const eventRoutes = require('./routes/events');
-const stakingRoutes = require('./routes/staking');
-const challengeRoutes = require('./routes/challenges');
-const payoutRoutes = require('./routes/payouts');
-const storageRoutes = require('./routes/storage');
+// const stakingRoutes = require('./routes/staking');
+// const challengeRoutes = require('./routes/challenges');
+// const payoutRoutes = require('./routes/payouts');
+// const storageRoutes = require('./routes/storage');
 
 // Import middleware
-const errorHandler = require('./middleware/errorHandler');
+const { errorHandler } = require('./middleware/errorHandler');
 const logger = require('./utils/logger');
 
 // Initialize Express app
@@ -67,10 +67,10 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
-app.use('/api/staking', stakingRoutes);
-app.use('/api/challenges', challengeRoutes);
-app.use('/api/payouts', payoutRoutes);
-app.use('/api/storage', storageRoutes);
+// app.use('/api/staking', stakingRoutes);
+// app.use('/api/challenges', challengeRoutes);
+// app.use('/api/payouts', payoutRoutes);
+// app.use('/api/storage', storageRoutes);
 
 // Socket.IO for real-time updates
 io.on('connection', (socket) => {
