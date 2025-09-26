@@ -10,9 +10,9 @@ require('dotenv').config();
 // Import routes
 const authRoutes = require('./routes/auth');
 const eventRoutes = require('./routes/events');
-// const stakingRoutes = require('./routes/staking'); // Has syntax errors
+const stakingRoutes = require('./routes/staking');
 const challengeRoutes = require('./routes/challenges');
-// const payoutRoutes = require('./routes/payouts'); // Has syntax errors
+const payoutRoutes = require('./routes/payouts');
 const storageRoutes = require('./routes/storage');
 
 // Import middleware
@@ -67,9 +67,9 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
-// app.use('/api/staking', stakingRoutes); // Has syntax errors
+app.use('/api/staking', stakingRoutes);
 app.use('/api/challenges', challengeRoutes);
-// app.use('/api/payouts', payoutRoutes); // Has syntax errors
+app.use('/api/payouts', payoutRoutes);
 app.use('/api/storage', storageRoutes);
 
 // Socket.IO for real-time updates

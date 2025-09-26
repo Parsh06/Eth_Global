@@ -61,13 +61,13 @@ router.post('/pools', authMiddleware, [
 });
 
 // Get all staking pools with filters
-router.get('/pools', 
+router.get('/pools', [
   query('eventId').optional().notEmpty().withMessage('Event ID cannot be empty'),
   query('challengeId').optional().notEmpty().withMessage('Challenge ID cannot be empty'),
   query('active').optional().isBoolean().withMessage('Active must be a boolean'),
   query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Limit must be between 1 and 50')
-, async (req, res) => {
+], async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -161,9 +161,9 @@ router.get('/pools',
 });
 
 // Get specific staking pool
-router.get('/pools/:poolId', 
+router.get('/pools/:poolId', [
   param('poolId').isNumeric().withMessage('Pool ID must be numeric')
-, async (req, res) => {
+], async (req, res) => {
   try {
     const { poolId } = req.params;
 
@@ -285,9 +285,9 @@ router.post('/pools/:poolId/stake', authMiddleware, [
 });
 
 // Unstake tokens from pool
-router.post('/pools/:poolId/unstake', authMiddleware, 
+router.post('/pools/:poolId/unstake', authMiddleware, [
   param('poolId').isNumeric().withMessage('Pool ID must be numeric')
-, async (req, res) => {
+], async (req, res) => {
   try {
     const { poolId } = req.params;
     const userAddress = req.user.address;
@@ -333,10 +333,10 @@ router.post('/pools/:poolId/unstake', authMiddleware,
 });
 
 // Get user's stakes across all pools
-router.get('/user/:userAddress/stakes', 
+router.get('/user/:userAddress/stakes', [
   param('userAddress').isEthereumAddress().withMessage('Valid Ethereum address is required'),
   query('active').optional().isBoolean().withMessage('Active must be a boolean')
-, async (req, res) => {
+], async (req, res) => {
   try {
     const { userAddress } = req.params;
     const { active } = req.query;
@@ -373,7 +373,7 @@ router.get('/user/:userAddress/stakes',
     };
 
     const graphResult = await graphService.query(graphQuery, variables);
-    const userStakes = graphResult.data.user?.stakes || ];
+    const userStakes = graphResult.data.user?.stakes || [];
 
     // Enrich with current on-chain data
     const stakesWithCurrentData = await Promise.all(
@@ -414,11 +414,11 @@ router.get('/user/:userAddress/stakes',
 });
 
 // Distribute rewards (admin only)
-router.post('/pools/:poolId/distribute', authMiddleware, 
+router.post('/pools/:poolId/distribute', authMiddleware, [
   param('poolId').isNumeric().withMessage('Pool ID must be numeric'),
   body('winners').isArray().withMessage('Winners array is required'),
-  body('amounts').isArray().withMessage('Amounts array is required'),
-, async (req, res) => {
+  body('amounts').isArray().withMessage('Amounts array is required')
+], async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -487,9 +487,9 @@ router.post('/pools/:poolId/distribute', authMiddleware,
 });
 
 // Get pool statistics
-router.get('/pools/:poolId/stats', 
+router.get('/pools/:poolId/stats', [
   param('poolId').isNumeric().withMessage('Pool ID must be numeric')
-, async (req, res) => {
+], async (req, res) => {
   try {
     const { poolId } = req.params;
 
@@ -543,7 +543,7 @@ router.get('/pools/:poolId/stats',
         totalDistributed: graphData.rewardDistributions.reduce((sum, dist) => {
           return sum + dist.amounts.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
         }, 0).toString(),
-        lastDistribution: graphData.rewardDistributions0] || null
+        lastDistribution: graphData.rewardDistributions[0] || null
       }
     };
 

@@ -317,7 +317,7 @@ router.get('/:payoutId', [
 });
 
 // Get user's payout history
-router.get('/user/:userAddress', 
+router.get('/user/:userAddress', [
   param('userAddress').isEthereumAddress().withMessage('Valid Ethereum address is required'),
   query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Limit must be between 1 and 50')
@@ -402,7 +402,7 @@ router.get('/user/:userAddress',
 });
 
 // Get payout statistics for an event
-router.get('/stats/:eventId', 
+router.get('/stats/:eventId', [
   param('eventId').notEmpty().withMessage('Event ID is required')
 ], async (req, res) => {
   try {
@@ -512,11 +512,14 @@ router.post('/auto-execute', authMiddleware, [
     }
 
     const poolId = pools[0].poolId;
+    
+    // Get pool data once
+    const poolData = await hederaService.getStakingPool(poolId);
+    const totalStaked = parseFloat(poolData.totalStaked);
+    
     const winners = winnersData.winners.map(w => w.submitter);
     const amounts = winnersData.winners.map(w => {
       // Calculate amount based on rank and total pool
-      const poolData = await hederaService.getStakingPool(poolId);
-      const totalStaked = parseFloat(poolData.totalStaked);
       return (totalStaked * (w.rewardPercentage / 100)).toString();
     });
 
